@@ -102,18 +102,21 @@ function BaseWindow:set_window_width(width)
 end
 
 function BaseWindow:get_option(name)
-  if self.window_options == nil then
-    return nil
-  else
-    local option = self.window_options[name]
-
-    -- Special treatment to get absolute positions. Ugly but...
-    if name == 'row' or name == 'col' then
-      return option[false]
-    else
-      return option
+    if self.window_options == nil then
+        return nil
     end
-  end
+
+    local option = self.window_options[name]
+    if option == nil then
+        return nil
+    end
+
+    -- Special treatment for row and col options
+    if (name == 'row' or name == 'col') and type(option) == 'table' then
+        return option[false]
+    end
+
+    return option
 end
 
 function BaseWindow:delete_buffer()
